@@ -1224,11 +1224,18 @@ void CGUIFontTTF::RenderCharacter(CGraphicContext& context,
   SVertex* v = &vertices[vertices.size() - VERTEX_PER_GLYPH];
   m_color = color;
 
-#if !defined(HAS_DX)
+#if defined(HAS_GL) || defined(HAS_GLES)
   uint8_t r = KODI::UTILS::GL::GetChannelFromARGB(KODI::UTILS::GL::ColorChannel::R, color);
   uint8_t g = KODI::UTILS::GL::GetChannelFromARGB(KODI::UTILS::GL::ColorChannel::G, color);
   uint8_t b = KODI::UTILS::GL::GetChannelFromARGB(KODI::UTILS::GL::ColorChannel::B, color);
   uint8_t a = KODI::UTILS::GL::GetChannelFromARGB(KODI::UTILS::GL::ColorChannel::A, color);
+#endif
+
+#if defined(HAS_VULKAN)
+  uint8_t r = (color >> 16) & 0xFF;
+  uint8_t g = (color >> 8) & 0xFF;
+  uint8_t b = (color >> 0) & 0xFF;
+  uint8_t a = (color >> 24) & 0xFF;
 #endif
 
   for (int i = 0; i < VERTEX_PER_GLYPH; i++)

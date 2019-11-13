@@ -338,6 +338,40 @@ if(TARGET ${APP_NAME_LC}::Alsa AND TARGET ${APP_NAME_LC}::PulseAudio)
   list(APPEND AUDIO_BACKENDS_LIST "alsa+pulseaudio")
 endif()
 
+# shader stuff
+if (TARGET Vulkan::Headers)
+  add_compile_definitions(-DHAS_VULKAN=1)
+endif()
+find_program(GLSLANG_VALIDATOR glslangValidator)
+if(NOT GLSLANG_VALIDATOR)
+  message(ERROR "glslangValidator not found")
+endif()
+
+add_custom_target(generate-vulkan-shaders)
+
+set(SHADER_SOURCE_DIR ${PROJECT_SOURCE_DIR}/system/shaders/vulkan)
+set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders/vulkan)
+
+set(SHADERS texture.vert
+            texture_multi.vert
+            texture.frag
+            texture_fonts.frag
+            texture_noblend.frag
+            texture_multi.frag
+            texture_multi_blendcolor.frag)
+
+foreach(SHADER ${SHADERS})
+  add_custom_command(COMMENT "Compiling shader: ${SHADER}"
+                     OUTPUT ${SHADER}.inc
+                     COMMAND ${CMAKE_COMMAND} -E make_directory ${SHADER_BINARY_DIR}
+                     COMMAND ${GLSLANG_VALIDATOR} -V -x -o ${SHADER_BINARY_DIR}/${SHADER}.inc ${SHADER_SOURCE_DIR}/${SHADER}
+                     DEPENDS ${SHADER_SOURCE_DIR}/${SHADER} ${GLSLANG_VALIDATOR})
+  add_custom_target(${SHADER} DEPENDS ${SHADER}.inc)
+  add_dependencies(generate-vulkan-shaders ${SHADER})
+endforeach()
+
+include_directories(${SHADER_BINARY_DIR})
+
 # Compile Info
 add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
                    COMMAND ${CMAKE_COMMAND} -DCORE_SOURCE_DIR=${CMAKE_SOURCE_DIR}

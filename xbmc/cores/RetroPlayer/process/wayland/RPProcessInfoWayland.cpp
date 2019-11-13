@@ -11,7 +11,7 @@
 using namespace KODI;
 using namespace RETRO;
 
-CRPProcessInfoWayland::CRPProcessInfoWayland() : CRPProcessInfoEGL("Wayland")
+CRPProcessInfoWayland::CRPProcessInfoWayland() : CRPProcessInfo("Wayland")
 {
 }
 
@@ -23,4 +23,9 @@ std::unique_ptr<CRPProcessInfo> CRPProcessInfoWayland::Create()
 void CRPProcessInfoWayland::Register()
 {
   CRPProcessInfo::RegisterProcessControl(CRPProcessInfoWayland::Create);
+}
+
+HwProcedureAddress CRPProcessInfoWayland::GetHwProcedureAddress(const char* symbol)
+{
+  return static_cast<HwProcedureAddress>(nullptr);
 }

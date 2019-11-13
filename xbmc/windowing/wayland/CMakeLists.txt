@@ -79,4 +79,9 @@ if(TARGET_WEBOS)
                       ${WAYLAND_EXTRA_PROTOCOL_GENERATED_DIR}/wayland-webos-protocols.hpp)
 endif()
 
+if(TARGET Vulkan::Headers)
+  list(APPEND SOURCES WinSystemWaylandVulkanContext.cpp)
+  list(APPEND HEADERS WinSystemWaylandVulkanContext.h)
+endif()
+
 core_add_library(windowing_WAYLAND)

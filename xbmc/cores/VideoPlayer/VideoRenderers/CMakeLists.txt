@@ -43,6 +43,13 @@ if(TARGET ${APP_NAME_LC}::OpenGl)
                       RenderCaptureGL.h)
 endif()
 
+if (TARGET Vulkan::Headers)
+  list(APPEND SOURCES OverlayRendererVulkan.cpp
+                      RendererVulkan.cpp)
+  list(APPEND HEADERS OverlayRendererVulkan.h
+                      RendererVulkan.h)
+endif()
+
 if(TARGET ${APP_NAME_LC}::OpenGLES AND ("android" IN_LIST CORE_PLATFORM_NAME_LC OR
                             "ios" IN_LIST CORE_PLATFORM_NAME_LC OR
                             "tvos" IN_LIST CORE_PLATFORM_NAME_LC OR
@@ -55,6 +62,10 @@ if(TARGET ${APP_NAME_LC}::OpenGLES AND ("android" IN_LIST CORE_PLATFORM_NAME_LC 
   list(APPEND HEADERS LinuxRendererGLES.h
                       OverlayRendererGLES.cpp
                       RenderCaptureGLES.h)
+endif()
+
+if(TARGET Vulkan::Headers)
+  list(APPEND HEADERS RenderCaptureVulkan.h)
 endif()
 
 core_add_library(videorenderers)

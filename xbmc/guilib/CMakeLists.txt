@@ -162,6 +162,15 @@ set(HEADERS AspectRatio.h
             XBTF.h
             XBTFReader.h)
 
+if(TARGET Vulkan::Headers)
+  list(APPEND SOURCES GUIFontTTFVulkan.cpp
+                      GUITextureVulkan.cpp
+                      TextureVulkan.cpp)
+  list(APPEND HEADERS GUIFontTTFVulkan.h
+                      GUITextureVulkan.h
+                      TextureVulkan.h)
+endif()
+
 if(TARGET ${APP_NAME_LC}::OpenGl OR TARGET ${APP_NAME_LC}::OpenGLES)
   list(APPEND SOURCES Shader.cpp)
   list(APPEND HEADERS Shader.h)

@@ -40,4 +40,9 @@ if(CORE_SYSTEM_NAME STREQUAL windows OR CORE_SYSTEM_NAME STREQUAL windowsstore)
   list(APPEND HEADERS SlideShowPictureDX.h)
 endif()
 
+if(TARGET Vulkan::Headers)
+  list(APPEND SOURCES SlideShowPictureVK.cpp)
+  list(APPEND HEADERS SlideShowPictureVK.h)
+endif()
+
 core_add_library(pictures)
